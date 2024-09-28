@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../context/ContactProvider";
 
-function EditContact({ modal, contact }) {
+function EditContact({ modal, contact,setShowMenu }) {
   const { dispatch, state } = useContext(Context);
   const [editContact, setEditContact] = useState({
     firstname: contact?.firstname||"",
@@ -71,7 +71,7 @@ function EditContact({ modal, contact }) {
         </form>
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn">Close</button>
+            <button className="btn" onClick={()=>setShowMenu(false)}>Close</button>
           </form>
         </div>
       </div>

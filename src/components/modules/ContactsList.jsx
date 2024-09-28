@@ -35,7 +35,7 @@ function ContactsList({ contacts, dispatch }) {
           >
             multiple choose
           </button>
-          {selectedContacts.length > 1 ? (
+          {selectedContacts.length > 1 && !isShowChecks ? (
             <button
               className="bg-rose-900 text-white p-3 rounded-md m-2 btn"
               onClick={handleDelete}

@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Context } from "../../context/ContactProvider";
-import ContactsList from "../modules/ContactsList";
+import toast, { Toaster } from 'react-hot-toast';
 import { v4 as uuidv4 } from "uuid";
 import { getContacts } from "../../utils/getContacts";
 import { checkInputValue } from "../../utils/checkInputVal";
@@ -12,7 +11,7 @@ function ContactForm({dispatch}) {
   });
 
 
-
+  const notify = (message) => toast(message);
 
   function handleChange(e) {
     const value = e.target.value;
@@ -25,6 +24,11 @@ function ContactForm({dispatch}) {
   }
   function handleAdd(e) {
     e.preventDefault();
+    const mobileForm=new RegExp(/^(\+\d{1,3}[- ]?)?\d{11}$/)
+    if(!mobileForm.test(contact.mobile)){
+      notify('Incorrect mobile number format');
+      return;
+    }
     const emptyInputs = Object.keys(checkInputValue(contact)).length;
     if (emptyInputs === 0) {
       dispatch({
@@ -68,7 +72,7 @@ function ContactForm({dispatch}) {
             !contact.mobile ? "focus:bg-red-200 outline-none " : ""
           }`}
           placeholder="mobile"
-          type="text"
+          type="number"
           name="mobile"
           value={contact.mobile}
           onChange={handleChange}
@@ -80,7 +84,7 @@ function ContactForm({dispatch}) {
           add
         </button>
       </form>
-      
+      <Toaster />
     </div>
   );
 }
