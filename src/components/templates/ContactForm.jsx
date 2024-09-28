@@ -1,9 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {  useContext,  useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import { v4 as uuidv4 } from "uuid";
-import { getContacts } from "../../utils/getContacts";
 import { checkInputValue } from "../../utils/checkInputVal";
-function ContactForm({dispatch}) {
+import { Context } from "../../context/ContactProvider";
+function ContactForm() {
+  const {dispatch}=useContext(Context)
   const [contact, setContact] = useState({
     firstname: "",
     lastname: "",

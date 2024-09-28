@@ -13,7 +13,7 @@ function ListItem({
     ...contact,
     checked: false,
   });
-  const { dispatch, state } = useContext(Context);
+  const { dispatch } = useContext(Context);
   const [showMenu, setShowMenu] = useState(false);
   const modal = useRef();
   function handleChange(e) {
@@ -23,7 +23,7 @@ function ListItem({
   function handleMenu(e) {
     setShowMenu(true);
   }
-  function handleDelete() {
+  function handleDelete(contact) {
     dispatch({ type: "DELETE", payload: contact });
   }
   useEffect(() => {
@@ -70,7 +70,7 @@ function ListItem({
           >
             <button
               className="btn bg-rose-800 px-3 py-1 rounded text-white"
-              onClick={handleDelete}
+              onClick={()=>handleDelete(contact)}
             >
               Delete
             </button>

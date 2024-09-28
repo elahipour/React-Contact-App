@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import {  useContext, useState } from "react";
 import ListItem from "./ListItem";
-function ContactsList({ contacts, dispatch }) {
-  const [selectedContacts, setSelectedContacts] = useState([...contacts]);
-  const [isShowChecks, setIsShowChecks] = useState(false);
+import { Context } from "../../context/ContactProvider";
+function ContactsList() {
+  const { dispatch, contacts } = useContext(Context);  
+  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [isShowChecks, setIsShowChecks] = useState(true);
   function handleDelete() {
     const result = contacts.filter((contact) => {
       return selectedContacts.find((selected) => selected.id === contact.id);
@@ -15,7 +17,7 @@ function ContactsList({ contacts, dispatch }) {
   return (
     <>
       <ul className="flex mt-2 flex-col gap-3 px-2 max-h-[250px] overflow-y-scroll">
-        {contacts.map((contact, index) => {
+        {contacts?.map((contact, index) => {
           return (
             <ListItem
               isShowChecks={isShowChecks}

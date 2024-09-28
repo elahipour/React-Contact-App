@@ -13,16 +13,14 @@ const initialContacts = {
 export const Context = createContext();
 
 function ContactProvider({ children }) {
-  const [contacts, setContacts] = useState([
-   
-  ]);
+  const [contacts, setContacts] = useState([]);
+  const [state, dispatch] = useReducer(contactReducer, initialContacts);
 
   useEffect(() => {
-    async function fetchContacts() {
-      const contacts = getContacts();
+    (async () => {
+      const contacts = await getContacts();
       setContacts(contacts);
-    }
-    fetchContacts();
+    })();
   }, []);
 
   function contactReducer(state, action) {
@@ -50,7 +48,7 @@ function ContactProvider({ children }) {
       case "DELETE": {
         fetch(`http://localhost:3001/contacts/${action.payload.id}`, {
           method: "DELETE",
-        }).then(() => setContacts(async () => await getContacts()));
+        }).then(async () => setContacts(await getContacts()));
 
         return { ...state };
       }
@@ -58,17 +56,16 @@ function ContactProvider({ children }) {
         fetch(`http://localhost:3001/contacts/${action.payload.id}`, {
           method: "PATCH",
           body: JSON.stringify({
-             ...action.payload 
+            ...action.payload,
           }),
           headers: { "Content-Type": "application/json" },
-        }).then(() => setContacts(async () => await getContacts()));
+        }).then(async () => setContacts(await getContacts()));
         return { ...state };
       }
       default:
         return state;
     }
   }
-  const [state, dispatch] = useReducer(contactReducer, initialContacts);
   return (
     <Context.Provider value={{ state, dispatch, contacts }}>
       {children}
