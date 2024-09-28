@@ -1,18 +1,19 @@
-import React, {  useContext,  useState } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import React, { useContext, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 import { checkInputValue } from "../../utils/checkInputVal";
 import { Context } from "../../context/ContactProvider";
 function ContactForm() {
-  const {dispatch}=useContext(Context)
+  const { dispatch } = useContext(Context);
   const [contact, setContact] = useState({
     firstname: "",
     lastname: "",
     mobile: "",
   });
 
-
-  const notify = (message) => toast(message);
+  const mobileFormatErr = (message) => toast.error(message);
+  const emptyFieldsErr = (message) => toast.error(message);
+  const successMsg = (message) => toast.success(message);
 
   function handleChange(e) {
     const value = e.target.value;
@@ -25,17 +26,18 @@ function ContactForm() {
   }
   function handleAdd(e) {
     e.preventDefault();
-    const mobileForm=new RegExp(/^(\+\d{1,3}[- ]?)?\d{11}$/)
-    if(!mobileForm.test(contact.mobile)){
-      notify('Incorrect mobile number format');
-      return;
-    }
+    const mobileForm = new RegExp(/^(\+\d{1,3}[- ]?)?\d{11}$/);
+
     const emptyInputs = Object.keys(checkInputValue(contact)).length;
     if (emptyInputs === 0) {
+      if (!mobileForm.test(contact.mobile)) {
+        mobileFormatErr("Incorrect mobile number format");
+        return;
+      }
       dispatch({
         type: "ADD",
         payload: {
-          contact: { ...contact, checked: false,id: uuidv4() },
+          contact: { ...contact, checked: false, id: uuidv4() },
         },
       });
       setContact({
@@ -43,6 +45,9 @@ function ContactForm() {
         lastname: "",
         mobile: "",
       });
+      successMsg("Contact added successfully");
+    } else {
+      emptyFieldsErr("Please fill all fields");
     }
   }
   return (
